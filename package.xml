@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+    <name>LithiumSoftware_Akhilleus</name>
+    <version>1.0.0</version>
+    <stability>stable</stability>
+    <license uri="http://opensource.org/licenses/MIT">MIT</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Frenet allows merchants to display freight options from multiple carriers, including brazilian Correios.</summary>
+    <description>The Frenet freight gateway is able to integrate and process tables of freight carriers and brazilian Correios. The freight calculation for the brazilian Correios services is done on-line (via Correios webservice) or in case of unavailability, uses database in the cloud highly available and regularly updated automatically, with the values of quotations. &#xD;
+It provides to the store owners, major carriers in Brazil to transport large volumes as well as JadLog, JAMEF among others.</description>
+    <notes>First Magento Connect version</notes>
+    <authors><author><name>Frenet</name><user>Frenet</user><email>contato@frenet.com.br</email></author></authors>
+    <date>2015-05-20</date>
+    <time>21:08:52</time>
+    <contents><target name="magecommunity"><dir name="LithiumSoftware"><dir name="Akhilleus"><dir name="Helper"><file name="Data.php" hash="fae99f78422836771d71873f253e8471"/></dir><dir name="Model"><dir name="Carrier"><file name="Akhilleus.php" hash="c5721e139ff641857dbde5a70db9527d"/></dir><dir name="Source"><file name="WeightType.php" hash="b5d8a6a8b530a540f64be4626beeedff"/></dir></dir><dir name="etc"><file name="config.xml" hash="e70400ff4978b0b1fac14c44dae0ba0e"/><file name="system.xml" hash="162638242c34a75a65091ec10b971741"/></dir><dir name="sql"><dir name="akhilleus_setup"><file name="install-1.0.0.php" hash="17104e4cf30a39bd0980837310ae940a"/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="LithiumSoftware_Akhilleus.xml" hash="ad180127bc24251a43a18818f2a30c21"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.2.0</min><max>6.0.0</max></php></required></dependencies>
+</package>
