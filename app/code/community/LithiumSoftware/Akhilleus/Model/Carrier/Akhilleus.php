@@ -57,7 +57,7 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
         // Call Webservices
         $wsReturn = $this->_getWebServicesQuoteReturn($request);
 
-        if ($wsReturn !== false) {
+        if ($wsReturn !== false && isset($wsReturn->GetShippingQuoteResult) && isset($wsReturn->GetShippingQuoteResult->ShippingSevicesArray)) {
 
             $this->_log("Qtd serviços: " . count($wsReturn->GetShippingQuoteResult->ShippingSevicesArray->ShippingSevices));
 
@@ -154,7 +154,7 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
                 $productObj = Mage::getModel('catalog/product')->load($product_id);
 
                 $shippingItem = new stdClass();
-                $shippingItem->Weight = $productObj->getWeight() * $item->getQty();
+                $shippingItem->Weight = $this->_fixWeight($productObj->getWeight()) * $item->getQty();
                 if ($this->getConfigFlag('use_default'))
                 {
                     $shippingItem->Length = $this->getConfigData('default_length'); //16

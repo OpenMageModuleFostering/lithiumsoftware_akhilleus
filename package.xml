@@ -1,23 +1,21 @@
 <?xml version="1.0"?>
 <package>
     <name>LithiumSoftware_Akhilleus</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <stability>stable</stability>
     <license uri="http://opensource.org/licenses/MIT">MIT</license>
     <channel>community</channel>
     <extends/>
     <summary>Frenet allows merchants to display freight options from multiple carriers, including brazilian Correios.</summary>
     <description>The Frenet freight gateway is able to integrate and process tables of freight carriers and brazilian Correios. The freight calculation for the brazilian Correios services is done on-line (via Correios webservice) or in case of unavailability, uses database in the cloud highly available and regularly updated automatically, with the values of quotations. &#xD;
-It provides to the store owners, major carriers in Brazil to transport large volumes as well as JadLog, ASAP Log, TNT, Direct, Total Express, JAMEF among others.</description>
-    <notes>Bug Fix:&#xD;
-- Multiple volumes&#xD;
-&#xD;
-Features:&#xD;
-- Tracking</notes>
+It provides to the store owners, major carriers in Brazil to transport large volumes as well as JadLog, TNT, Direct, Total Express, JAMEF among others.</description>
+    <notes>Bugfix:&#xD;
+- Weight - weightType == 'gr'&#xD;
+</notes>
     <authors><author><name>Frenet</name><user>MAG002970201</user><email>contato@frenet.com.br</email></author></authors>
-    <date>2016-03-11</date>
-    <time>19:30:43</time>
-    <contents><target name="magecommunity"><dir name="LithiumSoftware"><dir name="Akhilleus"><dir name="Helper"><file name="Data.php" hash="fae99f78422836771d71873f253e8471"/></dir><dir name="Model"><dir name="Carrier"><file name="Akhilleus.php" hash="6ec067e8919777395a6b2f5634f01649"/></dir><file name="Observer.php" hash="927d49b0b02ecfe36aa708a7f186422a"/><dir name="Source"><file name="WeightType.php" hash="90bd2253381d2c2094aa0183e3129eb7"/></dir></dir><dir name="etc"><file name="config.xml" hash="ab30a6169d9c8adbc8c9581d122745d9"/><file name="system.xml" hash="162638242c34a75a65091ec10b971741"/></dir><dir name="sql"><dir name="akhilleus_setup"><file name="install-1.0.0.php" hash="17104e4cf30a39bd0980837310ae940a"/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="LithiumSoftware_Akhilleus.xml" hash="ad180127bc24251a43a18818f2a30c21"/></dir></target></contents>
+    <date>2016-04-04</date>
+    <time>22:04:51</time>
+    <contents><target name="magecommunity"><dir name="LithiumSoftware"><dir name="Akhilleus"><dir name="Helper"><file name="Data.php" hash="fae99f78422836771d71873f253e8471"/></dir><dir name="Model"><dir name="Carrier"><file name="Akhilleus.php" hash="8aaf63e0c2dd7a9b458bfc053bd5e75a"/></dir><file name="Observer.php" hash="927d49b0b02ecfe36aa708a7f186422a"/><dir name="Source"><file name="WeightType.php" hash="90bd2253381d2c2094aa0183e3129eb7"/></dir></dir><dir name="etc"><file name="config.xml" hash="2dab27db22137030872ac99b7d79f8a7"/><file name="system.xml" hash="162638242c34a75a65091ec10b971741"/></dir><dir name="sql"><dir name="akhilleus_setup"><file name="install-1.0.0.php" hash="17104e4cf30a39bd0980837310ae940a"/></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="LithiumSoftware_Akhilleus.xml" hash="ad180127bc24251a43a18818f2a30c21"/></dir></target></contents>
     <compatible/>
-    <dependencies><required><php><min>5.2.1</min><max>6.0.0</max></php></required></dependencies>
+    <dependencies><required><php><min>5.2.0</min><max>6.0.0</max></php></required></dependencies>
 </package>
