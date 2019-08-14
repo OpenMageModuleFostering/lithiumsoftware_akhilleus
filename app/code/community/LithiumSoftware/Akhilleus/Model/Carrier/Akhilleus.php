@@ -27,11 +27,14 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
     protected $_title				= NULL; // Título do método de envio
     protected $_from				= NULL; // CEP de origem
     protected $_to					= NULL; // CEP de destino
+    protected $_destCountry         = NULL; // IATA do pais destino
     protected $_recipientDocument	= NULL; // CPF / CNPJ do destinatario
     protected $_packageWeight		= NULL; // valor ajustado do pacote
     protected $_showDelivery        = NULL; // Determina exibição de prazo de entrega
     protected $_addDeliveryDays     = NULL; // Adiciona n dias ao prazo de entrega
 
+    protected $_simpleProducts = array();
+    protected $_productsQty = array();
 
     /**
      * Collect rates for this shipping method based on information in $request
@@ -149,12 +152,18 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
             // gerar o array de produtos
             $shippingItemArray = array();
             $count = 0;
-            foreach($request->getAllItems() as $item){
-                $product_id = $item->getProductId();
-                $productObj = Mage::getModel('catalog/product')->load($product_id);
+            $this->getSimpleProducts($request->getAllItems());
+            $productsCount = count ($this->_simpleProducts);
+            $j = 0;
+            for ($i = 0; $i < $productsCount; $i ++)
+            {
+                $productObj = $this->_simpleProducts[$i];
+
+                //$this->_log(json_encode($productObj->getData()));
+                //$this->_log('Quantidade: ' . $this->_productsQty[$i]);
 
                 $shippingItem = new stdClass();
-                $shippingItem->Weight = $this->_fixWeight($productObj->getWeight()) * $item->getQty();
+                $shippingItem->Weight = $this->_fixWeight($productObj->getWeight()) * $this->_productsQty[$i];
                 if ($this->getConfigFlag('use_default'))
                 {
                     $shippingItem->Length = $this->getConfigData('default_length'); //16
@@ -191,8 +200,8 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
 
                 $shippingItem->Category = $result;
 
-                if($item->getProduct()->getData('fragile'))
-                    $shippingItem->isFragile = $item->getProduct()->getData('fragile');
+                if($productObj->getFragile())
+                    $shippingItem->isFragile = $productObj->getFragile();
                 else
                     $shippingItem->isFragile=false;
 
@@ -206,6 +215,7 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
                     'Password' => $this->getConfigData('password'),
                     'SellerCEP' => $this->_from,
                     'RecipientCEP' => $this->_to,
+                    'RecipientCountry' => $this->_destCountry,
                     'RecipientDocument' => $this->_recipientDocument,
                     'ShipmentInvoiceValue' => $this->_value,
                     'ShippingItemArray' => $shippingItemArray
@@ -412,31 +422,22 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
         $this->_from = $this->_formatZip(Mage::getStoreConfig('shipping/origin/postcode', $this->getStore()));
         $this->_to = $this->_formatZip($request->getDestPostcode());
 
+        if ($request->getDestCountryId()) {
+            $this->_destCountry = $request->getDestCountryId();
+        } else {
+            $this->_destCountry = 'BR';
+        }
+
+        $this->_log('Country ID ' . $this->_destCountry);
+
         if(!$this->_from){
             $this->_log('Erro com CEP de origem');
             return false;
         }
 
-        if(!$this->_to){
+        if(!$this->_to && $this->_destCountry == 'BR'){
             $this->_log('Erro com CEP de destino');
             $this->_throwError('zipcodeerror', 'CEP Inválido', __LINE__);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Verifica se o país está dentro da área atendida
-     *
-     * @param Mage_Shipping_Model_Rate_Request $request
-     * @return boolean
-     */
-    protected function _checkCountry(Mage_Shipping_Model_Rate_Request $request) {
-        $from = Mage::getStoreConfig('shipping/origin/country_id', $this->getStore());
-        $to = $request->getDestCountryId();
-        if ($from != "BR" || $to != "BR"){
-            $this->_log('Fora da área de atendimento');
             return false;
         }
 
@@ -602,6 +603,50 @@ class LithiumSoftware_Akhilleus_Model_Carrier_Akhilleus
                 return false;
             }
         }
+    }
+
+    private function getSimpleProducts($items)
+    {
+        $j = 0;
+        foreach ($items as $child)
+        {
+            $product_id = $child->getProductId ();
+            $product = Mage::getModel ('catalog/product')->load ($product_id);
+            $type_id = $product->getTypeId ();
+            if (strcmp ($type_id, 'simple')) continue;
+
+            $qty = $this->_getQty ($child);
+
+            $product = Mage::getModel ('catalog/product')->load ($child->getProductId());
+
+            $this->_simpleProducts [$j] = $product;
+            $this->_productsQty [$j] = (int)$qty;
+            $j = $j + 1;
+        }
+
+        return $this;
+    }
+
+    private function _getQty ($item)
+    {
+        $qty = 0;
+
+        $parentItem = $item->getParentItem ();
+        $targetItem = !empty ($parentItem) && $parentItem->getId () > 0 ? $parentItem : $item;
+
+        if ($targetItem instanceof Mage_Sales_Model_Quote_Item)
+        {
+            $qty = $targetItem->getQty ();
+        }
+        elseif ($targetItem instanceof Mage_Sales_Model_Order_Item)
+        {
+            $qty = $targetItem->getShipped () ? $targetItem->getShipped () : $targetItem->getQtyInvoiced ();
+            if ($qty == 0) {
+                $qty = $targetItem->getQtyOrdered();
+            }
+        }
+
+        return $qty;
     }
 
 
