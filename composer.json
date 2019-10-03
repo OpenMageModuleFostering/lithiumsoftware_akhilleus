@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/LithiumSoftware_Akhilleus",
+    "name": "OpenMageModuleFostering\/LithiumSoftware_Akhilleus",
     "type": "magento-module",
     "license": "MIT",
     "homepage": "",
     "description": "Frenet allows merchants to display freight options from multiple carriers, including brazilian Correios.",
     "authors": [
-    {
-        "name": "Frenet",
-        "email": "contato@frenet.com.br"
-    }
-],
+        {
+            "name": "Frenet",
+            "email": "contato@frenet.com.br"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }
